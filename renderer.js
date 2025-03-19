@@ -7,3 +7,20 @@ const func = async () => {
 }
 
 func()
+
+const openCamera = () => {
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    console.log("getUserMedia supported.")
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).
+      then((stream) => {
+        console.log('got stream')
+      }).
+      catch((err) => {
+        console.error(`The following getUserMedia error occurred: ${err}`)
+      })
+  } else {
+    console.log("getUserMedia not supported on your browser!");
+  }
+}
+
+openCamera()
