@@ -6,6 +6,6 @@ contextBridge.exposeInMainWorld('main', {
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
 */
-  saveFile: (n, arrayBuffer) => ipcRenderer.invoke('saveFile', n, arrayBuffer)
+  saveFile: (arrayBuffer) => ipcRenderer.invoke('saveFile', arrayBuffer)
   // we can also expose variables, not just functions
 })
