@@ -13,10 +13,30 @@ const createWindow = () => {
   win.loadFile('index.html')
 }
 
+const saveFile = (n, arrayBuffer) => {
+  console.log('n: ' + JSON.stringify(n))
+  console.log('data: ' + JSON.stringify(arrayBuffer))
+  console.log(`app got ArrayBuffer with ${arrayBuffer.byteLength} bytes`)
+/*
+buffer = Buffer.from(ab)
+//fs.rmSync(path, { force: true })
+fs.open(path, 'w', (err, fd) => {
+  if (err) throw err;
+
+  try {
+    fs.writeSync(fd, buffer);
+    fs.closeSync(fd);
+  } catch (err) {
+    fs.closeSync(fd);
+    throw err;
+  }
+});
+  */  
+}
+
 app.whenReady().then(() => {
-    /*
-  ipcMain.handle('ping', () => 'pong')
-*/
+  ipcMain.handle('saveFile', (_event, n, arrayBuffer) => saveFile(n, arrayBuffer))
+
   createWindow()
 
   app.on('activate', () => {
@@ -33,19 +53,10 @@ app.on('window-all-closed', () => {
 })
 
 /*
-Use MediaStream Recording API.
-// Capture data as an array of chunks, then can convert into a blob.
-navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    // Success callback
-    .then((stream) => {})
-const mediaRecorder = new MediaRecorder(stream);
-mediaRecorder.ondataavailable = (e) => {
-  chunks.push(e.data);
-};
 const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
 Pass it to main process via "context bridge" to be written to a file.
 //var file = new File([blob], "file_name", {lastModified: 1534584790000});
-ab = await blob.arrayBuffer();
+
 buffer = Buffer.from(ab)
 //fs.rmSync(path, { force: true })
 fs.open(path, 'w', (err, fd) => {

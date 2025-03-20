@@ -1,11 +1,11 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
-/*
-contextBridge.exposeInMainWorld('versions', {
+contextBridge.exposeInMainWorld('main', {
+    /*
   node: () => process.versions.node,
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
-  ping: () => ipcRenderer.invoke('ping')
+*/
+  saveFile: (n, arrayBuffer) => ipcRenderer.invoke('saveFile', n, arrayBuffer)
   // we can also expose variables, not just functions
 })
-*/

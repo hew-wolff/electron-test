@@ -11,21 +11,6 @@ const func = async () => {
 func()
 */
 
-const openCamera = () => {
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    console.log("getUserMedia supported.")
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).
-      then((stream) => {
-        console.log('got stream')
-      }).
-      catch((err) => {
-        console.error(`The following getUserMedia error occurred: ${err}`)
-      })
-  } else {
-    console.log("getUserMedia not supported on your browser!");
-  }
-}
-
 const initialize = () => {
   console.log('init');
   const recordStart = document.querySelector('.recordStart')
@@ -42,36 +27,39 @@ const initialize = () => {
   let mediaRecorder;
   let chunks = [];
 
-  recordStart.onclick = () => {
-    recordStart.disabled = true
-    recordEnd.disabled = false
-    navigator.mediaDevices?.getUserMedia({ video: true, audio: true }).
-      then((stream) => {
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true }).
+    then((stream) => {
         console.log('got stream')
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = (e) => {
-          chunks.push(e.data);
-        };
-        mediaRecorder.start();
-        console.log(mediaRecorder.state)
-        console.log("recorder started")
-      }).
-      catch((err) => {
-        console.error(`The following getUserMedia error occurred: ${err}`)
-        recordStart.disabled = false
-        recordEnd.disabled = true
-      })
+          chunks.push(e.data)
+        }
+    }).
+    catch((err) => {
+      console.error(`The following getUserMedia error occurred: ${err}`)
+      recordStart.disabled = false
+      recordEnd.disabled = true
+    })
+
+  recordStart.onclick = () => {
+    recordStart.disabled = true
+    recordEnd.disabled = false
+    mediaRecorder.start()
+    console.log(mediaRecorder.state)
+    console.log("recorder started")
   }
 
-  recordEnd.onclick = () => {
+  recordEnd.onclick = async () => {
     recordStart.disabled = false
     recordEnd.disabled = true
-    mediaRecorder.stop();
-    console.log(mediaRecorder.state);
-    console.log("recorder stopped");
+    mediaRecorder.stop()
+    console.log(mediaRecorder.state)
+    console.log("recorder stopped")
 
     const blob = new Blob(chunks, { type: "video/mp4" })
     console.log(`got blob with ${blob.size} bytes`)
+    const arrayBuffer = await blob.arrayBuffer();      
+    window.main.saveFile(33, arrayBuffer)
   }
 
   recordStart.disabled = false
@@ -79,5 +67,3 @@ const initialize = () => {
 }
 
 initialize()
-
-//openCamera()
