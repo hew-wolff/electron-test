@@ -38,16 +38,14 @@ const initialize = () => {
     recordStart.disabled = true
     recordEnd.disabled = false
     mediaRecorder.start()
-    console.log(mediaRecorder.state)
-    console.log("recorder started")
+    console.log('recorder started: ' + mediaRecorder.state)
   }
 
   recordEnd.onclick = async () => {
     recordStart.disabled = false
     recordEnd.disabled = true
     mediaRecorder.stop()
-    console.log(mediaRecorder.state)
-    console.log("recorder stopped")
+    console.log('recorder stopped: ' + mediaRecorder.state)
 
     const blob = new Blob(chunks, { type: mimeType })
     console.log(`got blob with ${blob.size} bytes`)
