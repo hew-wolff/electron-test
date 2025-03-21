@@ -7,7 +7,7 @@ const initialize = () => {
   recordStart.disabled = true
   recordEnd.disabled = true
 
-  const newMediaRecorder = (mimeType) => {
+  const newMediaRecorder = (mimeType, mimeTypeFileExtension) => {
     if (!(navigator.mediaDevices?.getUserMedia)) {
       console.log("getUserMedia not supported on your browser!")
       return undefined
@@ -20,28 +20,22 @@ const initialize = () => {
         console.log('mimeType: ' + JSON.stringify(mediaRecorder.mimeType));
         mediaRecorder.ondataavailable = async (e) => {
           console.log('recorder got data')
-          await displayVideo(e.data)
+          await displayVideo(e.data, mimeType, mimeTypeFileExtension)
         }
         return mediaRecorder
     }).
     catch((err) => {
       console.error(`The following getUserMedia error occurred: ${err}`)
-      recordStart.disabled = false
-      recordEnd.disabled = true
-
       return undefined
     })
   }
 
   // Seems to work better than MP4.
-  const mimeType = 'video/webm'
-  const mimeTypeFileExtension = 'webm'
-  let mediaRecorder = newMediaRecorder(mimeType);
+  let mediaRecorder = newMediaRecorder('video/webm', 'webm');
 
   recordStart.onclick = () => {
     recordStart.disabled = true
     recordEnd.disabled = false
-    //chunks = []
     mediaRecorder.start()
     console.log('recorder started: ' + mediaRecorder.state)
   }
@@ -53,7 +47,7 @@ const initialize = () => {
     console.log('recorder stopped: ' + mediaRecorder.state)
   }
 
-  const displayVideo = async (chunk) => {
+  const displayVideo = async (chunk, mimeType, mimeTypeFileExtension) => {
     const blob = new Blob([chunk], { type: mimeType })
     console.log(`got blob with ${blob.size} bytes`)
     const arrayBuffer = await blob.arrayBuffer()
