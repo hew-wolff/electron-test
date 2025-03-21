@@ -1,7 +1,8 @@
 const initialize = async () => {
   console.log('init')
-  const recordStart = document.querySelector('.recordStart')
-  const recordEnd = document.querySelector('.recordEnd')
+  const startButton = document.querySelector('.recordingStart')
+  const endButton = document.querySelector('.recordingEnd')
+  const recordingLabel = document.querySelector('.recordingLabel')
   const videoElement = document.querySelector('.video')
 
   const newMediaRecorder = async (mimeType, mimeTypeFileExtension) => {
@@ -31,16 +32,14 @@ const initialize = async () => {
   // Seems to work better than MP4.
   const mediaRecorder = await newMediaRecorder('video/webm', 'webm')
 
-  recordStart.onclick = () => {
-    recordStart.disabled = true
-    recordEnd.disabled = false
+  startButton.onclick = () => {
+    updateForRecording(true)
     mediaRecorder.start()
     console.log('recorder started: ' + mediaRecorder.state)
   }
 
-  recordEnd.onclick = async () => {
-    recordStart.disabled = false
-    recordEnd.disabled = true
+  endButton.onclick = async () => {
+    updateForRecording(false)
     mediaRecorder.stop()
     console.log('recorder stopped: ' + mediaRecorder.state)
   }
@@ -55,8 +54,21 @@ const initialize = async () => {
     videoElement.load()
   }
 
-  recordStart.disabled = false
-  recordEnd.disabled = true
+  const updateForRecording = (recording) => {
+    if (recording) {
+      recordingLabel.innerText = 'Recording'
+      recordingLabel.style.color = 'red'
+      startButton.disabled = true
+      endButton.disabled = false
+    } else {
+      recordingLabel.innerText = 'Record'
+      recordingLabel.style.color = 'black'
+      startButton.disabled = false
+      endButton.disabled = true
+    }
+  }
+
+  updateForRecording(false)
 }
 
 initialize()

@@ -20,7 +20,6 @@ const saveFile = (arrayBuffer, filenameExtension) => {
   const buffer = Buffer.from(arrayBuffer)
   const filename = 'temp_video.' + filenameExtension
   const videoPath = path.join(__dirname, filename)
-  // TODO try UInt8Array
   writeFile(videoPath, buffer, (err) => {
     if (err) {
       throw err
