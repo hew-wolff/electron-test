@@ -4,11 +4,6 @@ const initialize = async () => {
   const recordEnd = document.querySelector('.recordEnd')
   const videoElement = document.querySelector('.video')
 
-    /*
-  recordStart.disabled = true
-  recordEnd.disabled = true
-*/
-
   const newMediaRecorder = async (mimeType, mimeTypeFileExtension) => {
     let result        
     if (!(navigator.mediaDevices?.getUserMedia)) {
@@ -30,33 +25,11 @@ const initialize = async () => {
       console.error(`The following getUserMedia error occurred: ${err}`)
       return undefined
     }
-          /*
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).
-      then((stream) => {
-        console.log('got stream')
-        result = new MediaRecorder(stream, { mimeType: mimeType })
-        console.log('MediaRecorder: ' + JSON.stringify(result))
-        console.log('mimeType: ' + JSON.stringify(result.mimeType))
-        result.ondataavailable = async (e) => {
-          console.log('recorder got data')
-          await displayVideo(e.data, mimeType, mimeTypeFileExtension)
-        }
-    }).
-    catch((err) => {
-      console.error(`The following getUserMedia error occurred: ${err}`)
-      return undefined
-    })
-*/
-    console.log('returning result: ' + JSON.stringify(result))
     return result
   }
 
   // Seems to work better than MP4.
-    const mediaRecorder = await newMediaRecorder('video/webm', 'webm')
-    /*
-  console.log('outer MediaRecorder: ' + JSON.stringify(mediaRecorder))
-  console.log('outer mimeType: ' + JSON.stringify(mediaRecorder.mimeType))
-*/
+  const mediaRecorder = await newMediaRecorder('video/webm', 'webm')
 
   recordStart.onclick = () => {
     recordStart.disabled = true
