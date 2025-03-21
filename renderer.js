@@ -13,11 +13,11 @@ const initialize = async () => {
     }
     console.log('get stream')
     try {
-      let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       console.log('got stream')
       result = new MediaRecorder(stream, { mimeType: mimeType })
-      console.log('MediaRecorder: ' + JSON.stringify(result))
       console.log('mimeType: ' + JSON.stringify(result.mimeType))
+      // We get one event with all the data when the recorder stops.
       result.ondataavailable = async (e) => {
         console.log('recorder got data')
         await displayVideo(e.data, mimeType, mimeTypeFileExtension)
@@ -29,7 +29,7 @@ const initialize = async () => {
     return result
   }
 
-  // Seems to work better than MP4.
+  // WEBM seems to work better than MP4.
   const mediaRecorder = await newMediaRecorder('video/webm', 'webm')
 
   startButton.onclick = () => {

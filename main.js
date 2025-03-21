@@ -15,7 +15,6 @@ const createWindow = () => {
 }
 
 const saveFile = (arrayBuffer, filenameExtension) => {
-  console.log('data: ' + JSON.stringify(arrayBuffer))
   console.log(`app got ArrayBuffer with ${arrayBuffer.byteLength} bytes`)
   const buffer = Buffer.from(arrayBuffer)
   const filename = 'temp_video.' + filenameExtension
@@ -29,7 +28,7 @@ const saveFile = (arrayBuffer, filenameExtension) => {
 }
 
 app.whenReady().then(() => {
-    ipcMain.handle('saveFile', (_event, arrayBuffer, filenameExtension) => saveFile(arrayBuffer, filenameExtension))
+  ipcMain.handle('saveFile', (_event, arrayBuffer, filenameExtension) => saveFile(arrayBuffer, filenameExtension))
 
   createWindow()
 
