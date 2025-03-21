@@ -11,7 +11,7 @@ const initialize = () => {
     return
   }
 
-  // 'video/mp4'
+  // Seems to work better than MP4.
   const mimeType = 'video/webm'
   const mimeTypeFileExtension = 'webm'
   let mediaRecorder;
@@ -54,7 +54,10 @@ const initialize = () => {
     const arrayBuffer = await blob.arrayBuffer()
     window.main.saveFile(arrayBuffer, mimeTypeFileExtension)
 
-    
+    const videoElement = document.querySelector('.video')
+    const videoUrl = URL.createObjectURL(blob)
+    videoElement.src = videoUrl
+    videoElement.load()
   }
 
   recordStart.disabled = false

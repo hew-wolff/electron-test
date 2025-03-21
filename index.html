@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!--
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -11,6 +12,7 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+-->
     <title>Tiny Video App</title>
   </head>
   <body>
@@ -24,6 +26,7 @@
     -->
     <button class="recordStart">Start</button>
     <button class="recordEnd">Stop</button>
+    <video controls class="video"></video>
   </body>
   <script src="./renderer.js"></script>
 </html>
