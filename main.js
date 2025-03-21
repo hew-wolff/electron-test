@@ -14,31 +14,12 @@ const createWindow = () => {
   win.loadFile('index.html')
 }
 
-//const videoFilename = 'temp_video.mp4'
-const videoFilename = 'temp_video.webm'
-
-const saveFile = (arrayBuffer) => {
+const saveFile = (arrayBuffer, filenameExtension) => {
   console.log('data: ' + JSON.stringify(arrayBuffer))
   console.log(`app got ArrayBuffer with ${arrayBuffer.byteLength} bytes`)
-  let buffer = Buffer.from(arrayBuffer)
-  let videoPath = path.join(__dirname, videoFilename)
-    /*
-  open(videoPath, 'w', (err, fd) => {
-    if (err) {
-      throw err
-    }
-
-    try {
-      console.log('writing file')
-      writeSync(fd, buffer)
-      console.log('closing file')
-      closeSync(fd)
-    } catch (err) {
-      closeSync(fd)
-      throw err
-    }
-  })
-    */
+  const buffer = Buffer.from(arrayBuffer)
+  const filename = 'temp_video.' + filenameExtension
+  const videoPath = path.join(__dirname, filename)
   // TODO try UInt8Array
   writeFile(videoPath, buffer, (err) => {
     if (err) {
@@ -49,7 +30,7 @@ const saveFile = (arrayBuffer) => {
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle('saveFile', (_event, arrayBuffer) => saveFile(arrayBuffer))
+    ipcMain.handle('saveFile', (_event, arrayBuffer, filenameExtension) => saveFile(arrayBuffer, filenameExtension))
 
   createWindow()
 
@@ -65,23 +46,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-/*
-const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-Pass it to main process via "context bridge" to be written to a file.
-//var file = new File([blob], "file_name", {lastModified: 1534584790000});
-
-buffer = Buffer.from(ab)
-//fs.rmSync(path, { force: true })
-fs.open(path, 'w', (err, fd) => {
-  if (err) throw err;
-
-  try {
-    fs.writeSync(fd, buffer);
-    fs.closeSync(fd);
-  } catch (err) {
-    fs.closeSync(fd);
-    throw err;
-  }
-});
-*/

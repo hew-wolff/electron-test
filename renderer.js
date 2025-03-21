@@ -11,6 +11,9 @@ const initialize = () => {
     return
   }
 
+  // 'video/mp4'
+  const mimeType = 'video/webm'
+  const mimeTypeFileExtension = 'webm'
   let mediaRecorder;
   let chunks = [];
 
@@ -18,8 +21,7 @@ const initialize = () => {
   navigator.mediaDevices.getUserMedia({ video: true, audio: true }).
     then((stream) => {
         console.log('got stream')
-        //mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+        mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
         console.log('MediaRecorder: ' + JSON.stringify(mediaRecorder));
         console.log('mimeType: ' + JSON.stringify(mediaRecorder.mimeType));
         mediaRecorder.ondataavailable = (e) => {
@@ -47,11 +49,12 @@ const initialize = () => {
     console.log(mediaRecorder.state)
     console.log("recorder stopped")
 
-    //const blob = new Blob(chunks, { type: 'video/mp4' })
-    const blob = new Blob(chunks, { type: 'video/webm' })
+    const blob = new Blob(chunks, { type: mimeType })
     console.log(`got blob with ${blob.size} bytes`)
-    const arrayBuffer = await blob.arrayBuffer();      
-    window.main.saveFile(arrayBuffer)
+    const arrayBuffer = await blob.arrayBuffer()
+    window.main.saveFile(arrayBuffer, mimeTypeFileExtension)
+
+    
   }
 
   recordStart.disabled = false
